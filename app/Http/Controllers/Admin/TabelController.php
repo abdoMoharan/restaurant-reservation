@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Table;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TableStoreRequest;
+
+class TabelController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $tables = Table::all();
+        return view('admin.tables.index',compact('tables'));
+    }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('admin.tables.create');
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(TableStoreRequest $request)
+    {
+        Table::create([
+            'name' => $request->name,
+            'guest_number' => $request->guest_number,
+            'status' => $request->status ,
+            'location' => $request->location,
+        ]);
+
+        return to_route('admin.tables.index')->with('success', 'Table Created successfully.');;
+    }
+
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $table = Table::findOrfail($id);
+
+        return view('admin.tables.edit',compact('table'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(TableStoreRequest $request)
+    {
+        $table = Table::findOrFail($request->id);
+        $table->update($request->all());
+        return to_route('admin.tables.index')->with('success', 'Table updated successfully.');;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        // $table->Reservation()->detach();
+        $table=Table::findOrFail($request->id)->delete();
+
+        return to_route('admin.tables.index')->with('danger', 'Table deleted successfully.');;
+    }
+}
