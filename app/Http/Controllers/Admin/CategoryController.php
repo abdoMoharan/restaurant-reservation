@@ -79,7 +79,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($request->id);
         Storage::disk('attachment')->delete($category->image);
-
+        $category->menus()->detach();
         $category->delete();
         return to_route('admin.categoreis.index')->with('danger', 'Category deleted successfully.');
     }

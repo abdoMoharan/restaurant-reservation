@@ -98,7 +98,7 @@ class MenuController extends Controller
                 'image' => $path
             ]);
         }
-        
+
         $menu->update([
             'name' => $request->name,
             'description' => $request->description,
